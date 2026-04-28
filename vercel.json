@@ -9,6 +9,30 @@
       "maxDuration": 15
     }
   },
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "ghumoglobal.in"
+        }
+      ],
+      "destination": "https://ghumoglobal.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.ghumoglobal.in"
+        }
+      ],
+      "destination": "https://ghumoglobal.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/destinations/:path*",
