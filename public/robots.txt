@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /ghumo-cms/
+
+Sitemap: https://www.ghumoglobal.com/sitemap.xml
