@@ -46943,7 +46943,7 @@ var DEFAULTS = {
   countriesCovered: "28+",
   rating: "4.9",
   yearsExperience: "18+",
-  journeyOfMonthSlug: "bali",
+  journeyOfMonthSlug: "italy",
   journeyOfMonthLabel: "May 2026",
   homeAboutQuote: `"We don't sell tours. We design memories that outlive us."`,
   homeAboutBody: "Born in Kolkata in 2007, Ghumo Global was founded by two travel-obsessed friends who believed Indian travellers deserved an agency that took the same care planning their honeymoon as their pilgrimage. Two decades later we run thousands of journeys a year \u2014 but each one still begins with a conversation, not a brochure.",
@@ -47731,15 +47731,26 @@ async function seedInitialContent() {
       WHERE settings.value IN (
         '',
         '/img/hero.png',
-        '/img/dest-switzerland.png',
-        '/api/uploads/1777363189144-4f954bab-Switzerland.jpg.jpg'
+        '/img/dest-switzerland.png'
       );
 
     INSERT INTO settings (key, value)
     VALUES ('homeAboutImage', '')
     ON CONFLICT (key) DO UPDATE
       SET value = EXCLUDED.value
-      WHERE settings.value = '/img/story-1.png'
+      WHERE settings.value = '/img/story-1.png';
+
+    INSERT INTO settings (key, value)
+    VALUES ('journeyOfMonthSlug', 'italy')
+    ON CONFLICT (key) DO UPDATE
+      SET value = EXCLUDED.value
+      WHERE settings.value IN ('', 'bali');
+
+    INSERT INTO settings (key, value)
+    VALUES ('journeyOfMonthLabel', 'May 2026')
+    ON CONFLICT (key) DO UPDATE
+      SET value = EXCLUDED.value
+      WHERE settings.value = ''
   `);
   const destCountResult = await pool.query("SELECT COUNT(*)::int AS count FROM destinations");
   if ((destCountResult.rows[0]?.count ?? 0) === 0) {

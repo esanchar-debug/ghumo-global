@@ -45,7 +45,7 @@ Set these in Vercel Project Settings -> Environment Variables:
 | `DATABASE_URL` | Yes | PostgreSQL connection string. Use SSL if your provider requires it. |
 | `SESSION_SECRET` | Yes | Random 64+ character string for admin session signing. |
 | `ADMIN_PASSWORD` | First deploy only | Initial admin password if the database has no saved admin hash yet. |
-| `APP_ORIGIN` | Yes | Full production origin, e.g. `https://www.ghumoglobal.com`. |
+| `APP_ORIGIN` | Yes | Full production origin, currently `https://book.ghumoglobal.com`. |
 | `BLOB_READ_WRITE_TOKEN` | For uploads | Vercel Blob token. Without this, CMS image upload returns a clear error on Vercel. |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` | Optional | Password reset email transport. Without SMTP, reset links are logged. |
 
@@ -102,7 +102,7 @@ Key values to set:
 | `DATABASE_URL` | PostgreSQL connection string |
 | `SESSION_SECRET` | Random 64-char string for session signing |
 | `ADMIN_PASSWORD` | Your first admin password (15+ chars, 1 uppercase, 1 special) |
-| `APP_ORIGIN` | Your full domain, e.g. `https://www.ghumoglobal.com` |
+| `APP_ORIGIN` | Your full domain, currently `https://book.ghumoglobal.com` |
 
 Generate a secure SESSION_SECRET:
 ```bash
@@ -139,16 +139,16 @@ Use Nginx as a reverse proxy in front of Node.js:
 ```nginx
 server {
     listen 80;
-    server_name www.ghumoglobal.com ghumoglobal.com;
-    return 301 https://www.ghumoglobal.com$request_uri;
+    server_name book.ghumoglobal.com;
+    return 301 https://book.ghumoglobal.com$request_uri;
 }
 
 server {
     listen 443 ssl;
-    server_name www.ghumoglobal.com;
+    server_name book.ghumoglobal.com;
 
-    ssl_certificate     /etc/letsencrypt/live/www.ghumoglobal.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/www.ghumoglobal.com/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/book.ghumoglobal.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/book.ghumoglobal.com/privkey.pem;
 
     # Increase upload size limit for admin image uploads
     client_max_body_size 25M;
@@ -166,7 +166,7 @@ server {
 
 Get a free SSL certificate with Certbot:
 ```bash
-sudo certbot --nginx -d www.ghumoglobal.com -d ghumoglobal.com
+sudo certbot --nginx -d book.ghumoglobal.com
 ```
 
 ---
@@ -205,7 +205,7 @@ sudo systemctl status ghumo-global
 
 ## First login
 
-1. Navigate to: `https://www.ghumoglobal.com/ghumo-cms/login`
+1. Navigate to: `https://book.ghumoglobal.com/ghumo-cms/login`
 2. Use the `ADMIN_PASSWORD` you set in `.env`
 3. Immediately click **"Forgot password?"** to set a permanent strong password
 4. After changing the password, remove `ADMIN_PASSWORD` from your `.env` (it's no longer needed)

@@ -38,15 +38,15 @@ In Vercel -> Project -> Settings -> Environment Variables, add:
 |---|---|
 | `DATABASE_URL` | Neon/Supabase/Postgres connection string with `sslmode=require` |
 | `SESSION_SECRET` | Random 64+ character secret |
-| `APP_ORIGIN` | The final site origin, e.g. `https://your-project.vercel.app` or `https://www.ghumoglobal.com` |
+| `APP_ORIGIN` | The final site origin, currently `https://book.ghumoglobal.com` |
 | `ADMIN_PASSWORD` | First admin login password only |
 
 This repo has a local `.env` file for copy-paste into Vercel. It is intentionally ignored by Git and must not be pushed.
 
-Before uploading/copying it to Vercel, replace:
+Before uploading/copying it to Vercel, confirm:
 
 ```env
-APP_ORIGIN="https://REPLACE-WITH-YOUR-VERCEL-DOMAIN.vercel.app"
+APP_ORIGIN="https://book.ghumoglobal.com"
 ```
 
 with the real Vercel or custom-domain origin.
@@ -102,7 +102,7 @@ When connecting a custom domain:
 3. Change `APP_ORIGIN` to the custom domain, for example:
 
 ```env
-APP_ORIGIN=https://www.ghumoglobal.com
+APP_ORIGIN=https://book.ghumoglobal.com
 ```
 
 4. Redeploy.
