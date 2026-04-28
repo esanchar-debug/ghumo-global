@@ -46935,7 +46935,7 @@ var import_express4 = __toESM(require_express2(), 1);
 var DEFAULTS = {
   heroTitle: "Travel the world, the Ghumo way.",
   heroSubtitle: "From the boulevards of Paris to the backwaters of Kerala \u2014 international-standard luxury journeys, designed in Kolkata with warm Indian hospitality.",
-  heroImage: "/img/dest-switzerland.png",
+  heroImage: "/img/hero-switzerland.jpg",
   contactPhone: "+91 7076332211",
   contactEmail: "contactus@ghumoglobal.com",
   address: "Room No- 3G, 3rd Floor 18, \nRabindra Sarani, Poddar Court, Gate No. 03\nKolkata-700001",
@@ -46947,7 +46947,7 @@ var DEFAULTS = {
   journeyOfMonthLabel: "May 2026",
   homeAboutQuote: `"We don't sell tours. We design memories that outlive us."`,
   homeAboutBody: "Born in Kolkata in 2007, Ghumo Global was founded by two travel-obsessed friends who believed Indian travellers deserved an agency that took the same care planning their honeymoon as their pilgrimage. Two decades later we run thousands of journeys a year \u2014 but each one still begins with a conversation, not a brochure.",
-  homeAboutImage: "/img/story-1.png",
+  homeAboutImage: "",
   homeCTAHeading: "Ready to plan your next journey?",
   homeCTABody: "Tell us where you're dreaming of going. We'll come back within 24 hours with a draft itinerary and an honest quote.",
   founderOneName: "Sourav Agarwal",
@@ -47725,12 +47725,21 @@ var SEED_STORIES = [
 async function seedInitialContent() {
   await pool.query(`
     INSERT INTO settings (key, value)
-    VALUES
-      ('heroImage', '/img/dest-switzerland.png'),
-      ('homeAboutImage', '/img/story-1.png')
+    VALUES ('heroImage', '/img/hero-switzerland.jpg')
     ON CONFLICT (key) DO UPDATE
       SET value = EXCLUDED.value
-      WHERE settings.value = '' OR settings.value = '/img/hero.png'
+      WHERE settings.value IN (
+        '',
+        '/img/hero.png',
+        '/img/dest-switzerland.png',
+        '/api/uploads/1777363189144-4f954bab-Switzerland.jpg.jpg'
+      );
+
+    INSERT INTO settings (key, value)
+    VALUES ('homeAboutImage', '')
+    ON CONFLICT (key) DO UPDATE
+      SET value = EXCLUDED.value
+      WHERE settings.value = '/img/story-1.png'
   `);
   const destCountResult = await pool.query("SELECT COUNT(*)::int AS count FROM destinations");
   if ((destCountResult.rows[0]?.count ?? 0) === 0) {

@@ -4,12 +4,24 @@
   "buildCommand": "npm run build",
   "outputDirectory": "public",
   "functions": {
-    "api/[...path].mjs": {
+    "api/**/*.mjs": {
       "includeFiles": "server/**",
       "maxDuration": 15
     }
   },
   "rewrites": [
+    {
+      "source": "/api/destinations/:path*",
+      "destination": "/api/destinations/[...path]"
+    },
+    {
+      "source": "/api/stories/:path*",
+      "destination": "/api/stories/[...path]"
+    },
+    {
+      "source": "/api/admin/:path*",
+      "destination": "/api/admin/[...path]"
+    },
     {
       "source": "/:path((?!api/).*)",
       "destination": "/index.html"
