@@ -1,0 +1,14 @@
+{
+  "name": "ghumo-global-server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/verify-public.mjs",
+    "start": "node server/index.mjs",
+    "vercel:build": "vercel build --yes"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.3.3",
+    "nodemailer": "^8.0.7"
+  }
+}
