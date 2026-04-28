@@ -46935,7 +46935,7 @@ var import_express4 = __toESM(require_express2(), 1);
 var DEFAULTS = {
   heroTitle: "Travel the world, the Ghumo way.",
   heroSubtitle: "From the boulevards of Paris to the backwaters of Kerala \u2014 international-standard luxury journeys, designed in Kolkata with warm Indian hospitality.",
-  heroImage: "/img/hero.png",
+  heroImage: "/img/dest-switzerland.png",
   contactPhone: "+91 7076332211",
   contactEmail: "contactus@ghumoglobal.com",
   address: "Room No- 3G, 3rd Floor 18, \nRabindra Sarani, Poddar Court, Gate No. 03\nKolkata-700001",
@@ -46947,7 +46947,7 @@ var DEFAULTS = {
   journeyOfMonthLabel: "May 2026",
   homeAboutQuote: `"We don't sell tours. We design memories that outlive us."`,
   homeAboutBody: "Born in Kolkata in 2007, Ghumo Global was founded by two travel-obsessed friends who believed Indian travellers deserved an agency that took the same care planning their honeymoon as their pilgrimage. Two decades later we run thousands of journeys a year \u2014 but each one still begins with a conversation, not a brochure.",
-  homeAboutImage: "",
+  homeAboutImage: "/img/story-1.png",
   homeCTAHeading: "Ready to plan your next journey?",
   homeCTABody: "Tell us where you're dreaming of going. We'll come back within 24 hours with a draft itinerary and an honest quote.",
   founderOneName: "Sourav Agarwal",
@@ -47460,12 +47460,362 @@ async function ensureDatabaseSchema() {
     );
   `);
 }
+var SEED_DESTINATIONS = [
+  {
+    slug: "bali",
+    name: "Bali",
+    region: "international",
+    tagline: "Rice terraces, temple mornings, and private-pool calm.",
+    summary: "A gentle island journey through Ubud, Seminyak, beach clubs, waterfalls, and sacred temples with enough quiet time to actually feel away.",
+    imageUrl: "/img/dest-bali.png",
+    durationLabel: "6N / 7D",
+    priceFrom: 98500,
+    locations: ["Ubud", "Seminyak", "Uluwatu"],
+    featured: true,
+    sortOrder: 10,
+    itinerary: [
+      ["Arrival in Bali", "Private transfer to Ubud, check in, and unwind after your flight."],
+      ["Ubud slow day", "Rice terraces, temple visits, coffee tasting, and a relaxed local dinner."],
+      ["Waterfalls and wellness", "Visit Tegenungan waterfall, enjoy a spa session, and move at island pace."],
+      ["Seminyak coast", "Transfer to the coast for beach clubs, boutique shopping, and sunset dining."]
+    ]
+  },
+  {
+    slug: "dubai",
+    name: "Dubai",
+    region: "international",
+    tagline: "Skyline luxury, desert evenings, and family-friendly ease.",
+    summary: "A polished Dubai escape with premium hotels, Burj Khalifa views, private transfers, desert safari, malls, marinas, and optional theme parks.",
+    imageUrl: "/img/dest-dubai.png",
+    durationLabel: "4N / 5D",
+    priceFrom: 74900,
+    locations: ["Downtown Dubai", "Desert Safari", "Dubai Marina"],
+    featured: true,
+    sortOrder: 20,
+    itinerary: [
+      ["Arrival and marina", "Check in and spend the evening around Dubai Marina or JBR."],
+      ["Modern Dubai", "Burj Khalifa, Dubai Mall, fountain show, and curated city highlights."],
+      ["Desert evening", "Private desert safari with dune drives, dinner, and entertainment."],
+      ["Leisure day", "Choose theme parks, shopping, beach time, or premium dining."]
+    ]
+  },
+  {
+    slug: "france",
+    name: "France",
+    region: "international",
+    tagline: "Paris, vineyards, Riviera light, and artful days.",
+    summary: "A refined France route combining Paris icons, museum time, cafe culture, scenic rail journeys, and optional extensions to Provence or the Riviera.",
+    imageUrl: "/img/dest-france.png",
+    durationLabel: "7N / 8D",
+    priceFrom: 189000,
+    locations: ["Paris", "Versailles", "Nice"],
+    featured: true,
+    sortOrder: 30,
+    itinerary: [
+      ["Paris arrival", "Settle into Paris and enjoy a gentle Seine-side first evening."],
+      ["Classic Paris", "Eiffel Tower, Louvre area, Montmartre, and hand-picked cafes."],
+      ["Versailles or museums", "Choose palace grandeur or deeper art and food experiences."],
+      ["Riviera extension", "Fly or rail south for coastal light, old towns, and sea views."]
+    ]
+  },
+  {
+    slug: "italy",
+    name: "Italy",
+    region: "international",
+    tagline: "Rome history, Tuscan roads, and Venetian evenings.",
+    summary: "A richly paced Italy journey through iconic cities, local food, Renaissance art, private walking tours, and beautiful rail connections.",
+    imageUrl: "/img/dest-italy.png",
+    durationLabel: "8N / 9D",
+    priceFrom: 205000,
+    locations: ["Rome", "Florence", "Venice"],
+    featured: false,
+    sortOrder: 40,
+    itinerary: [
+      ["Rome arrival", "Check in and explore piazzas, fountains, and old-city lanes."],
+      ["Ancient Rome", "Colosseum, Forum, and a guided evening food walk."],
+      ["Florence by rail", "Transfer to Tuscany for art, leather markets, and cathedral views."],
+      ["Venice finale", "Canals, gondolas, hidden lanes, and a slow final dinner."]
+    ]
+  },
+  {
+    slug: "japan",
+    name: "Japan",
+    region: "international",
+    tagline: "Tokyo energy, Kyoto rituals, and bullet-train precision.",
+    summary: "A beautifully balanced Japan itinerary with neon nights, temple mornings, seasonal gardens, food walks, and smooth intercity travel.",
+    imageUrl: "/img/dest-japan.png",
+    durationLabel: "8N / 9D",
+    priceFrom: 235000,
+    locations: ["Tokyo", "Kyoto", "Osaka"],
+    featured: true,
+    sortOrder: 50,
+    itinerary: [
+      ["Tokyo arrival", "Ease into Tokyo with Shibuya, Ginza, or a neighbourhood food walk."],
+      ["Tokyo contrasts", "Modern city icons, shrines, markets, and curated shopping."],
+      ["Kyoto by bullet train", "Temple lanes, tea culture, bamboo groves, and old Japan."],
+      ["Osaka flavours", "Street food, castle views, and an easy departure plan."]
+    ]
+  },
+  {
+    slug: "switzerland",
+    name: "Switzerland",
+    region: "international",
+    tagline: "Alpine railways, lake towns, and postcard-perfect calm.",
+    summary: "A scenic Swiss journey through mountains, glassy lakes, cable cars, premium rail routes, and carefully timed village stays.",
+    imageUrl: "/img/dest-switzerland.png",
+    durationLabel: "7N / 8D",
+    priceFrom: 225000,
+    locations: ["Zurich", "Interlaken", "Lucerne"],
+    featured: true,
+    sortOrder: 60,
+    itinerary: [
+      ["Zurich arrival", "Arrive, settle in, and enjoy lakeside Switzerland at an easy pace."],
+      ["Lucerne and mountains", "Chapel Bridge, lake views, and optional Titlis or Pilatus."],
+      ["Interlaken base", "Transfer into the Alps for mountain villages and adventure options."],
+      ["High alpine day", "Choose Jungfraujoch, Grindelwald, or a scenic rail experience."]
+    ]
+  },
+  {
+    slug: "rajasthan",
+    name: "Rajasthan",
+    region: "domestic",
+    tagline: "Forts, palaces, desert sunsets, and royal hospitality.",
+    summary: "A heritage-rich Rajasthan circuit with private guides, palace hotels, old-city walks, desert evenings, and comfortable road logistics.",
+    imageUrl: "/img/dest-rajasthan.png",
+    durationLabel: "6N / 7D",
+    priceFrom: 54900,
+    locations: ["Jaipur", "Jodhpur", "Udaipur"],
+    featured: true,
+    sortOrder: 70,
+    itinerary: [
+      ["Jaipur arrival", "Check in and explore the Pink City at a relaxed pace."],
+      ["Forts and bazaars", "Amber Fort, City Palace, local crafts, and curated shopping."],
+      ["Jodhpur blue city", "Mehrangarh Fort, old lanes, and a heritage dinner."],
+      ["Udaipur lakes", "Lake Pichola, palace views, and a graceful final evening."]
+    ]
+  },
+  {
+    slug: "goa",
+    name: "Goa",
+    region: "domestic",
+    tagline: "Beach days, Portuguese lanes, and easy coastal living.",
+    summary: "A relaxed Goa break designed around the right beach base, food, heritage walks, cafes, nightlife, and unhurried sea time.",
+    imageUrl: "/img/dest-goa.png",
+    durationLabel: "4N / 5D",
+    priceFrom: 34900,
+    locations: ["North Goa", "South Goa", "Panjim"],
+    featured: true,
+    sortOrder: 80,
+    itinerary: [
+      ["Arrival by the sea", "Check in and keep the first evening open for the beach."],
+      ["Old Goa and Panjim", "Churches, Latin Quarter lanes, cafes, and local flavours."],
+      ["Beach leisure", "Choose beach clubs, water sports, or a quieter southern stretch."],
+      ["Slow finale", "Brunch, shopping, and a comfortable airport transfer."]
+    ]
+  },
+  {
+    slug: "kerala",
+    name: "Kerala",
+    region: "domestic",
+    tagline: "Backwaters, tea hills, spice air, and quiet luxury.",
+    summary: "A Kerala journey through Munnar, Alleppey, Kochi, and palm-lined waterways with a gentle rhythm and strong local hospitality.",
+    imageUrl: "/img/dest-kerala.png",
+    durationLabel: "5N / 6D",
+    priceFrom: 48900,
+    locations: ["Kochi", "Munnar", "Alleppey"],
+    featured: true,
+    sortOrder: 90,
+    itinerary: [
+      ["Kochi arrival", "Heritage streets, Chinese fishing nets, and a calm first evening."],
+      ["Munnar hills", "Tea estates, viewpoints, spice gardens, and cool mountain air."],
+      ["Backwater cruise", "Houseboat or resort stay around Alleppey with slow-water views."],
+      ["Departure day", "Easy transfer with optional shopping or cafe stop."]
+    ]
+  },
+  {
+    slug: "himachal",
+    name: "Himachal",
+    region: "domestic",
+    tagline: "Mountain roads, pine forests, cafes, and clear air.",
+    summary: "A comfortable Himachal plan around Shimla, Manali, Dharamshala, or boutique mountain stays, tuned for season and road time.",
+    imageUrl: "/img/dest-himachal.png",
+    durationLabel: "6N / 7D",
+    priceFrom: 45900,
+    locations: ["Shimla", "Manali", "Dharamshala"],
+    featured: false,
+    sortOrder: 100,
+    itinerary: [
+      ["Arrival in the hills", "Road or rail-assisted arrival with a relaxed check-in."],
+      ["Mountain town day", "Mall roads, viewpoints, cafes, and gentle local sightseeing."],
+      ["Valley drive", "Scenic route through forests, rivers, and optional adventure stops."],
+      ["Leisure and return", "Keep the final day light before the onward journey."]
+    ]
+  },
+  {
+    slug: "ladakh",
+    name: "Ladakh",
+    region: "domestic",
+    tagline: "High passes, monastery silence, and lunar landscapes.",
+    summary: "A carefully acclimatised Ladakh journey through Leh, Nubra, Pangong, monasteries, and dramatic high-altitude scenery.",
+    imageUrl: "/img/dest-ladakh.png",
+    durationLabel: "6N / 7D",
+    priceFrom: 68900,
+    locations: ["Leh", "Nubra Valley", "Pangong"],
+    featured: true,
+    sortOrder: 110,
+    itinerary: [
+      ["Leh acclimatisation", "Arrive, rest, and keep the first day deliberately slow."],
+      ["Monasteries and Leh", "Thiksey, Shey, Shanti Stupa, and local market time."],
+      ["Nubra Valley", "Cross high passes for dunes, villages, and big-sky landscapes."],
+      ["Pangong day", "Lake views, photography stops, and a carefully planned return."]
+    ]
+  },
+  {
+    slug: "maldives",
+    name: "Maldives",
+    region: "international",
+    tagline: "Overwater villas, turquoise lagoons, and total reset.",
+    summary: "A resort-led Maldives escape matched to your budget and travel style, from honeymoon villas to family-friendly island stays.",
+    imageUrl: "/img/dest-maldives.png",
+    durationLabel: "4N / 5D",
+    priceFrom: 115000,
+    locations: ["Male", "Private Island", "Lagoon Villa"],
+    featured: true,
+    sortOrder: 120,
+    itinerary: [
+      ["Island transfer", "Arrive in Male and transfer by speedboat or seaplane."],
+      ["Lagoon leisure", "Swim, snorkel, spa, and keep the day beautifully open."],
+      ["Experiences", "Choose dolphin cruise, sandbank picnic, diving, or private dining."],
+      ["Slow departure", "Breakfast by the water and transfer back to Male."]
+    ]
+  }
+];
+var SEED_STORIES = [
+  {
+    slug: "bali-beyond-the-postcards",
+    title: "Bali beyond the postcards",
+    excerpt: "How a slower Ubud-first plan turns Bali into more than a beach break.",
+    content: "The best Bali journeys do not rush from beach club to beach club. We start with Ubud, where mornings can be quiet, green, and deeply local. Then the coast becomes a reward rather than the whole trip.",
+    coverImage: "/img/story-1.png",
+    category: "International",
+    author: "Ghumo Global",
+    published: true
+  },
+  {
+    slug: "rajasthan-without-rushing",
+    title: "Rajasthan without rushing",
+    excerpt: "A better way to connect Jaipur, Jodhpur, and Udaipur without losing the romance.",
+    content: "Rajasthan is at its best when the drives, hotel choices, and sightseeing windows are planned carefully. We build in pauses so the forts, markets, and lake evenings stay memorable.",
+    coverImage: "/img/story-2.png",
+    category: "Domestic",
+    author: "Ghumo Global",
+    published: true
+  },
+  {
+    slug: "desert-evenings-done-right",
+    title: "Desert evenings done right",
+    excerpt: "Why timing, transfers, and the right camp matter more than a checklist.",
+    content: "Desert trips can feel magical or tiring depending on logistics. The right plan keeps the golden hour free, the transfer comfortable, and the evening private enough to remember.",
+    coverImage: "/img/story-3.png",
+    category: "Travel Notes",
+    author: "Ghumo Global",
+    published: true
+  }
+];
+async function seedInitialContent() {
+  await pool.query(`
+    INSERT INTO settings (key, value)
+    VALUES
+      ('heroImage', '/img/dest-switzerland.png'),
+      ('homeAboutImage', '/img/story-1.png')
+    ON CONFLICT (key) DO UPDATE
+      SET value = EXCLUDED.value
+      WHERE settings.value = '' OR settings.value = '/img/hero.png'
+  `);
+  const destCountResult = await pool.query("SELECT COUNT(*)::int AS count FROM destinations");
+  if ((destCountResult.rows[0]?.count ?? 0) === 0) {
+    for (const dest of SEED_DESTINATIONS) {
+      const created = await pool.query(
+        `
+          INSERT INTO destinations (
+            slug, name, region, tagline, summary, image_url, duration_label,
+            price_from, locations, featured, sort_order
+          )
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb, $10, $11)
+          ON CONFLICT (slug) DO UPDATE SET
+            name = EXCLUDED.name,
+            region = EXCLUDED.region,
+            tagline = EXCLUDED.tagline,
+            summary = EXCLUDED.summary,
+            image_url = EXCLUDED.image_url,
+            duration_label = EXCLUDED.duration_label,
+            price_from = EXCLUDED.price_from,
+            locations = EXCLUDED.locations,
+            featured = EXCLUDED.featured,
+            sort_order = EXCLUDED.sort_order
+          RETURNING id
+        `,
+        [
+          dest.slug,
+          dest.name,
+          dest.region,
+          dest.tagline,
+          dest.summary,
+          dest.imageUrl,
+          dest.durationLabel,
+          dest.priceFrom,
+          JSON.stringify(dest.locations),
+          dest.featured,
+          dest.sortOrder
+        ]
+      );
+      const destinationId = created.rows[0]?.id;
+      if (!destinationId) continue;
+      await pool.query("DELETE FROM itinerary_days WHERE destination_id = $1", [destinationId]);
+      for (const [index, day] of dest.itinerary.entries()) {
+        await pool.query(
+          `
+            INSERT INTO itinerary_days (destination_id, day_number, title, description)
+            VALUES ($1, $2, $3, $4)
+          `,
+          [destinationId, index + 1, day[0], day[1]]
+        );
+      }
+    }
+  }
+  const storyCountResult = await pool.query("SELECT COUNT(*)::int AS count FROM stories");
+  if ((storyCountResult.rows[0]?.count ?? 0) === 0) {
+    for (const story of SEED_STORIES) {
+      await pool.query(
+        `
+          INSERT INTO stories (
+            slug, title, excerpt, content, cover_image, category, author,
+            published, published_at
+          )
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
+          ON CONFLICT (slug) DO NOTHING
+        `,
+        [
+          story.slug,
+          story.title,
+          story.excerpt,
+          story.content,
+          story.coverImage,
+          story.category,
+          story.author,
+          story.published
+        ]
+      );
+    }
+  }
+}
 var appReadyPromise;
 async function prepareApp() {
   assertRuntimeEnv();
   if (!appReadyPromise) {
     appReadyPromise = (async () => {
       await ensureDatabaseSchema();
+      await seedInitialContent();
       await initializeAdminPassword();
     })();
   }
