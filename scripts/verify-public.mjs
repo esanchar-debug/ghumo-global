@@ -5,7 +5,7 @@ const publicDir = path.resolve("public");
 const requiredFiles = [
   "index.html",
   "favicon.svg",
-  "assets/index-CPExG_lm.js",
+  "assets/index-a834ecb4.js",
   "assets/index-D5d-6ujy.css"
 ];
 
