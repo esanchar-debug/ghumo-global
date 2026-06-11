@@ -16,3 +16,6 @@ pnpm-debug.log*
 
 # SGNK continuity snapshots (local working memory)
 .sgnk/
+backups/
+backups/.launchd.log
+backups/.launchd.err

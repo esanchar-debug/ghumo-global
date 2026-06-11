@@ -1,0 +1,126 @@
+name: db-backup
+
+# Auto-installed by ~/.config/sgnk-backup/install.sh
+# Project: ghumo-global
+# Required repo secret: DATABASE_URL (or DIRECT_URL)
+# Three storage tiers:
+#   1. GitHub Actions artifact (90d)
+#   2. db-backups orphan branch (last 90 dailies)
+#   3. Local launchd job on Sagnik's Mac (separate from this workflow)
+
+on:
+  schedule:
+    - cron: '0 2 * * *'   # 02:00 UTC daily = 07:30 IST (off-peak)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: db-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+
+      - name: Detect Postgres server version
+        id: pgver
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ] && [ -z "$DIRECT_URL" ]; then
+            echo "::error::Set DATABASE_URL or DIRECT_URL secret in repo Settings → Secrets → Actions"
+            exit 1
+          fi
+          # Default to PG17 (Supabase). Override via vars.PG_MAJOR if needed.
+          echo "major=${{ vars.PG_MAJOR || '17' }}" >> $GITHUB_OUTPUT
+
+      - name: Install postgresql-client-${{ steps.pgver.outputs.major }}
+        run: |
+          MAJOR='${{ steps.pgver.outputs.major }}'
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -fsSL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc \
+            https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          . /etc/os-release
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $VERSION_CODENAME-pgdg main" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update -qq
+          sudo apt-get install -y "postgresql-client-${MAJOR}"
+          "/usr/lib/postgresql/${MAJOR}/bin/pg_dump" --version
+
+      - name: Run backup
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          PG_MAJOR: ${{ steps.pgver.outputs.major }}
+        run: |
+          set -euo pipefail
+          STAMP=$(date -u +%Y%m%dT%H%M%SZ)
+          OUT="backups/ghumo-global-${STAMP}.sql.gz"
+          mkdir -p backups
+          DB_URL="${DIRECT_URL:-$DATABASE_URL}"
+          PG_DUMP="/usr/lib/postgresql/${PG_MAJOR}/bin/pg_dump"
+          "$PG_DUMP" "$DB_URL" \
+            --clean --if-exists --no-owner --no-acl --no-comments --schema=public \
+            | gzip -9 > "$OUT"
+          SIZE=$(stat -c%s "$OUT")
+          if [ "$SIZE" -lt 1024 ]; then
+            echo "::error::Backup too small ($SIZE bytes) — likely failed dump"
+            exit 1
+          fi
+          echo "backup_file=$OUT" >> $GITHUB_OUTPUT
+          ls -lah "$OUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ghumo-global-db-backup-${{ github.run_id }}
+          path: backups/*.sql.gz
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Commit to db-backups orphan branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          BACKUP_FILE=$(ls backups/*.sql.gz | head -1)
+          STAMP=$(date -u +%Y%m%dT%H%M%SZ)
+          DEST="backups/ghumo-global-${STAMP}.sql.gz"
+
+          git fetch origin db-backups || true
+          if git ls-remote --exit-code origin db-backups >/dev/null 2>&1; then
+            git worktree add /tmp/db-backups-wt db-backups
+          else
+            git worktree add --orphan -b db-backups /tmp/db-backups-wt
+            find /tmp/db-backups-wt -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          fi
+
+          mkdir -p /tmp/db-backups-wt/backups
+          cp "$BACKUP_FILE" "/tmp/db-backups-wt/$DEST"
+
+          # Keep at most 90 backups per project.
+          (cd /tmp/db-backups-wt && \
+             ls -1t backups/ghumo-global-*.sql.gz 2>/dev/null | tail -n +91 | xargs -r rm -f)
+
+          cd /tmp/db-backups-wt
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add backups/
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "db-backup(ghumo-global): ${STAMP}"
+            git push origin db-backups
+          fi
+
+      - run: |
+          echo "### db-backup ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Project: ghumo-global" >> $GITHUB_STEP_SUMMARY
+          echo "- File: $(ls backups/*.sql.gz | head -1)" >> $GITHUB_STEP_SUMMARY
+          echo "- Size: $(du -h backups/*.sql.gz | head -1 | cut -f1)" >> $GITHUB_STEP_SUMMARY
