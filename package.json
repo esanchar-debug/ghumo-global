@@ -8,6 +8,7 @@
     "vercel:build": "vercel build --yes"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.3.3",
     "nodemailer": "^8.0.7"
   }
