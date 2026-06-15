@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "node scripts/verify-public.mjs",
+    "build": "node scripts/copy-speed-insights.mjs && node scripts/verify-public.mjs",
     "start": "node server/index.mjs",
     "vercel:build": "vercel build --yes"
   },
   "dependencies": {
     "@vercel/blob": "^2.3.3",
+    "@vercel/speed-insights": "^2.0.0",
     "nodemailer": "^8.0.7"
   }
 }
